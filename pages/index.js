@@ -4,32 +4,16 @@ import Image from "next/image";
 import Banner from "../components/banner";
 import Card from "../components/card";
 
+import { fetchCoffeeStores } from "../lib/coffee-stores";
+
 import styles from "../styles/Home.module.css";
 
 /* Server Side */
 export async function getStaticProps(context) {
-  const response = await fetch(
-    "https://api.foursquare.com/v3/places/nearby?ll=43.65267326999575,-79.39545615725015&query=coffee stores&v=20220105&limit=7",
-    {
-      headers: {
-        Authorization: process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY,
-      },
-    }
-  );
-  const data = await response.json();
-
-  const transformedData =
-    data?.results?.map((venue) => {
-      return {
-        id: venue.fsq_id,
-        ...venue,
-      };
-    }) || [];
-
-  console.log("transformedData", transformedData);
+  const coffeeStores = await fetchCoffeeStores();
 
   return {
-    props: { coffeeStores: transformedData }, // will be passed to the page component as props
+    props: { coffeeStores }, // will be passed to the page component as props
   };
 }
 
