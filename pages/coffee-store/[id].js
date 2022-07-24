@@ -36,11 +36,13 @@ export async function getStaticProps(staticProps) {
 
   const coffeeStores = await fetchCoffeeStores();
 
+  const findCoffeeStoresById = coffeeStores.find(
+    (coffeeStore) => coffeeStore.id.toString() === params.id
+  );
+
   return {
     props: {
-      coffeeStore: coffeeStores.find(
-        (coffeeStore) => coffeeStore.id.toString() === params.id
-      ),
+      coffeeStore: findCoffeeStoresById ? findCoffeeStoresById : {},
     }, // will be passed to the page component as props
   };
 }
