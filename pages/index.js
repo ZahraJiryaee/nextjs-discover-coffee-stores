@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
+
+import { ACTION_TYPE, StoreContext } from "./_app";
 
 import Banner from "../components/banner";
 import Card from "../components/card";
@@ -24,10 +26,13 @@ export async function getStaticProps(context) {
 export default function Home(props) {
   console.log("props", props);
 
-  const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } =
+  const { dispatch, state } = useContext(StoreContext);
+
+  const { coffeeStores, latLong } = state;
+
+  const { handleTrackLocation, locationErrorMsg, isFindingLocation } =
     useTrackLocation();
 
-  const [coffeeStores, setCoffeeStores] = useState("");
   const [coffeeStoresError, setCoffeeStoresError] = useState(null);
 
   console.log({ latLong, locationErrorMsg });
@@ -38,7 +43,10 @@ export default function Home(props) {
         try {
           const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 30);
           console.log({ fetchedCoffeeStores });
-          setCoffeeStores(fetchedCoffeeStores);
+          dispatch({
+            type: ACTION_TYPE.SET_COFFEE_STORES,
+            payload: { coffeeStores: fetchedCoffeeStores },
+          });
         } catch (error) {
           console.log({ error });
           setCoffeeStoresError(error.message);

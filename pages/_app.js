@@ -2,9 +2,9 @@ import { createContext, useReducer } from "react";
 
 import "../styles/globals.css";
 
-const StoreContext = createContext();
+export const StoreContext = createContext();
 
-const ACTION_TYPE = {
+export const ACTION_TYPE = {
   SET_LAT_LONG: "SET_LAT_LONG",
   SET_COFFEE_STORES: "SET_COFFEE_STORES",
 };
