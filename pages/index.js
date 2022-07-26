@@ -41,12 +41,18 @@ export default function Home(props) {
     async function fetchData() {
       if (latLong) {
         try {
-          const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 30);
+          const fetchedCoffeeStores = await fetch(
+            `/api/getCoffeeStoresByLocation?latLong=${latLong}&limit=30`
+          );
           console.log({ fetchedCoffeeStores });
+          const coffeeStores = await fetchedCoffeeStores.json();
+
           dispatch({
             type: ACTION_TYPE.SET_COFFEE_STORES,
-            payload: { coffeeStores: fetchedCoffeeStores },
+            payload: { coffeeStores },
           });
+
+          setCoffeeStoresError("");
         } catch (error) {
           console.log({ error });
           setCoffeeStoresError(error.message);
@@ -81,7 +87,7 @@ export default function Home(props) {
         {/* STORS NEAR ME */}
         {coffeeStores.length > 0 && (
           <div className={styles.sectionWrapper}>
-            <h2 className={styles.heading2}>Stores near ne</h2>
+            <h2 className={styles.heading2}>Stores near me</h2>
             <div className={styles.cardLayout}>
               {coffeeStores.map((coffeeStore) => (
                 <Card
