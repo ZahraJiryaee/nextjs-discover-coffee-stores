@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 
-import { ACTION_TYPE, StoreContext } from "./_app";
+import { ACTION_TYPE, StoreContext } from "../store/store-context";
 
 import Banner from "../components/banner";
 import Card from "../components/card";
