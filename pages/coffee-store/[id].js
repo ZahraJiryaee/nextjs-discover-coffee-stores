@@ -54,20 +54,14 @@ export async function getStaticProps(staticProps) {
 /* Client Side */
 const CoffeeStore = (initialProps) => {
   const router = useRouter();
-  console.log("router:", router);
-  console.log("initialProps - id:", initialProps);
-
-  if (router.isFallback) {
-    return <div>Loading ...</div>;
-  }
 
   const id = router.query.id;
-
-  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
 
   const {
     state: { coffeeStores },
   } = useContext(StoreContext);
+
+  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
 
   const handleCreateCoffeeStore = async (coffeeStore) => {
     try {
@@ -87,7 +81,6 @@ const CoffeeStore = (initialProps) => {
         }),
       });
       const dbCoffeeStore = response.json();
-      console.log("dbCoffeeStore:", dbCoffeeStore);
     } catch (error) {
       console.log("Error creating coffee store", error);
     }
@@ -100,18 +93,28 @@ const CoffeeStore = (initialProps) => {
           (coffeeStore) => coffeeStore.id.toString() === id
         );
         if (findCoffeeStoreFromContext) {
-          console.log(
-            "findCoffeeStoreFromContext:",
-            findCoffeeStoreFromContext
-          );
           setCoffeeStore(findCoffeeStoreFromContext);
           handleCreateCoffeeStore(findCoffeeStoreFromContext);
         }
       }
+    } else {
+      // SSG
+      handleCreateCoffeeStore(initialProps.coffeeStore);
     }
-  }, [id]);
+  }, [id, initialProps.coffeeStore, coffeeStores]);
 
-  const { address, name, neighbourhood, imgUrl } = coffeeStore;
+  if (router.isFallback) {
+    return <div>Loading ...</div>;
+  }
+
+  console.log("coffeeStore:", coffeeStore);
+
+  const {
+    address = "",
+    name = "",
+    neighbourhood = "",
+    imgUrl = "",
+  } = coffeeStore || {};
 
   const handleUpvoteButton = () => {
     console.log("handle upvote");
