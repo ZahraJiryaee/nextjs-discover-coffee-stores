@@ -16,6 +16,7 @@ const createCoffeeStore = async (req, res) => {
           const records = getMinifiedRecords(findCoffeeStoreRecord);
           res.json(records);
         } else {
+          // create a record
           if (name) {
             const createRecord = await table.create([
               {
