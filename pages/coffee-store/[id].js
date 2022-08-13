@@ -5,6 +5,7 @@ import Head from "next/head";
 import Image from "next/image";
 
 import cls from "classnames";
+import useSWR from "swr";
 
 import { StoreContext } from "../../store/store-context";
 
@@ -118,11 +119,25 @@ const CoffeeStore = (initialProps) => {
 
   const [votingCount, setVotingCount] = useState(1);
 
+  const fetcher = (url) => fetch(url).then((r) => r.json());
+  const { data } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setCoffeeStore(data[0]);
+      setVotingCount(data[0].voting);
+    }
+  }, [data]);
+
   const handleUpvoteButton = () => {
     console.log("handle upvote");
     let count = votingCount + 1;
     setVotingCount(count);
   };
+
+  if (data?.error?.error) {
+    return <div>Something went wrong retrieving coffee stor page</div>;
+  }
 
   return (
     <div className={styles.layout}>
