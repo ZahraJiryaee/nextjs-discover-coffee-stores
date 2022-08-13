@@ -117,7 +117,7 @@ const CoffeeStore = (initialProps) => {
     imgUrl = "",
   } = coffeeStore || {};
 
-  const [votingCount, setVotingCount] = useState(1);
+  const [votingCount, setVotingCount] = useState(0);
 
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
@@ -129,10 +129,29 @@ const CoffeeStore = (initialProps) => {
     }
   }, [data]);
 
-  const handleUpvoteButton = () => {
-    console.log("handle upvote");
-    let count = votingCount + 1;
-    setVotingCount(count);
+  const handleUpvoteButton = async () => {
+    try {
+      const response = await fetch("/api/favoriteCoffeeStoreById", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+        }),
+      });
+      const dbCoffeeStore = response.json();
+
+      console.log("dbCoffeeStore - favoriteCoffeeStoreById::", dbCoffeeStore);
+
+      if (dbCoffeeStore && dbCoffeeStore.length > 0) {
+        let count = votingCount + 1;
+        setVotingCount(count);
+        console.log("kikikikik");
+      }
+    } catch (error) {
+      console.log("Err upvoting coffee store", error);
+    }
   };
 
   if (data?.error?.error) {
