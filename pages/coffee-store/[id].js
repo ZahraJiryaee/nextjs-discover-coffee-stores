@@ -159,6 +159,7 @@ const CoffeeStore = (initialProps) => {
     <div className={styles.layout}>
       <Head>
         <title>{name}</title>
+        <meta name="description" content={`${name} coffee store`}></meta>
       </Head>
       <div className={styles.container}>
         <div className={styles.col1}>
@@ -183,15 +184,30 @@ const CoffeeStore = (initialProps) => {
         </div>
         <div className={cls("glass", styles.col2)}>
           <div className={styles.iconWrapper}>
-            <Image src="/static/icons/places.svg" width={24} height={24} />
+            <Image
+              src="/static/icons/places.svg"
+              width={24}
+              height={24}
+              alt="place-icon"
+            />
             <p className={styles.text}>{address}</p>
           </div>
           <div className={styles.iconWrapper}>
-            <Image src="/static/icons/nearMe.svg" width={24} height={24} />
+            <Image
+              src="/static/icons/nearMe.svg"
+              width={24}
+              height={24}
+              alt="nearme-icon"
+            />
             <p className={styles.text}>{neighbourhood}</p>
           </div>
           <div className={styles.iconWrapper}>
-            <Image src="/static/icons/star.svg" width={24} height={24} />
+            <Image
+              src="/static/icons/star.svg"
+              width={24}
+              height={24}
+              alt="star icon"
+            />
             <p className={styles.text}>{votingCount}</p>
           </div>
 
